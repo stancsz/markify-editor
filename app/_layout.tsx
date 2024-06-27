@@ -1,10 +1,12 @@
-import { Stack } from "expo-router";
-import 'bootstrap/dist/css/bootstrap.min.css'; // Importing Bootstrap CSS
+import { Stack } from 'expo-router';
+import './global.css'; // Importing global CSS
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
+    <div className="container-fluid p-0" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Stack>
+        <Stack.Screen name="index" />
+      </Stack>
+    </div>
   );
 }

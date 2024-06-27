@@ -3,7 +3,7 @@ import { ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import { marked } from 'marked';
 import RenderHtml from 'react-native-render-html';
 import { Dimensions } from 'react-native';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Importing Bootstrap CSS
+import './global.css'; // Importing global CSS
 
 const { width } = Dimensions.get('window');
 
@@ -28,25 +28,25 @@ export default function Index() {
   }, [focusText]);
 
   return (
-    <ScrollView className="container">
-      <div className="btn-group" role="group" aria-label="Basic example">
+    <ScrollView className="container mt-4" style={{ flex: 1, padding: '1rem' }}>
+      <div className="btn-group mb-4" role="group" aria-label="Basic example">
         <button type="button" className="btn btn-secondary" onClick={() => setMode('default')}>Default View</button>
         <button type="button" className="btn btn-secondary" onClick={() => setMode('singleContainer')}>Single Container View</button>
         <button type="button" className="btn btn-secondary" onClick={() => setMode('focusMode')}>Focus Mode</button>
       </div>
       {mode === 'default' && (
-        <div className="row">
-          <div className="col">
+        <div className="row" style={{ flex: 1 }}>
+          <div className="col-6 p-2 border" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <TextInput
-              className="form-control"
               multiline
               placeholder="Enter Markdown here..."
               value={markdownText}
               onChangeText={setMarkdownText}
+              style={{ flex: 1, minHeight: '20rem' }}
             />
           </div>
-          <div className="col">
-            <div className="p-3 border bg-light">
+          <div className="col-6 p-2 border" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div className="p-3 bg-light" style={{ flex: 1 }}>
               <RenderHtml
                 contentWidth={width}
                 source={{ html: htmlContent }}
@@ -57,17 +57,17 @@ export default function Index() {
         </div>
       )}
       {mode === 'singleContainer' && (
-        <div className="container mt-3">
+        <div className="container mt-3" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           {isEditMode ? (
             <TextInput
-              className="form-control"
               multiline
               placeholder="Enter Markdown here..."
               value={markdownText}
               onChangeText={setMarkdownText}
+              style={{ flex: 1, minHeight: '20rem' }}
             />
           ) : (
-            <div className="p-3 border bg-light">
+            <div className="p-3 border bg-light" style={{ flex: 1 }}>
               <RenderHtml
                 contentWidth={width}
                 source={{ html: htmlContent }}
@@ -80,8 +80,8 @@ export default function Index() {
         </div>
       )}
       {mode === 'focusMode' && (
-        <div className="container mt-3">
-          <div className="p-3 border bg-light">
+        <div className="container mt-3" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <div className="p-3 border bg-light" style={{ flex: 1 }}>
             <RenderHtml
               contentWidth={width}
               source={{ html: htmlContent }}
@@ -90,12 +90,11 @@ export default function Index() {
           </div>
           {focusText !== '' && (
             <TextInput
-              className="form-control position-absolute"
-              style={{ top: `${focusPosition.y}px`, left: `${focusPosition.x}px` }}
               multiline
               value={focusText}
               onChangeText={setFocusText}
               onBlur={handleSave}
+              style={{ marginTop: '1rem' }}
             />
           )}
         </div>
