@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { View, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import { marked } from 'marked';
 import RenderHtml from 'react-native-render-html';
 import { Dimensions } from 'react-native';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Importing Bootstrap CSS
 
 const { width } = Dimensions.get('window');
 
@@ -27,164 +28,78 @@ export default function Index() {
   }, [focusText]);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => setMode('default')}><Text>Default View</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setMode('singleContainer')}><Text>Single Container View</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setMode('focusMode')}><Text>Focus Mode</Text></TouchableOpacity>
-      </View>
-
+    <ScrollView className="container">
+      <div className="btn-group" role="group" aria-label="Basic example">
+        <button type="button" className="btn btn-secondary" onClick={() => setMode('default')}>Default View</button>
+        <button type="button" className="btn btn-secondary" onClick={() => setMode('singleContainer')}>Single Container View</button>
+        <button type="button" className="btn btn-secondary" onClick={() => setMode('focusMode')}>Focus Mode</button>
+      </div>
       {mode === 'default' && (
-        <View style={styles.defaultContainer}>
-          <TextInput
-            style={[styles.textInput, styles.editor]}
-            multiline
-            placeholder="Enter Markdown here..."
-            value={markdownText}
-            onChangeText={setMarkdownText}
-          />
-          <View style={styles.previewContainer}>
-            <RenderHtml
-              contentWidth={width}
-              source={{ html: htmlContent }}
-              tagsStyles={htmlStyles}
-              onPress={(e) => handleSectionPress(e)}
+        <div className="row">
+          <div className="col">
+            <TextInput
+              className="form-control"
+              multiline
+              placeholder="Enter Markdown here..."
+              value={markdownText}
+              onChangeText={setMarkdownText}
             />
-          </View>
-        </View>
+          </div>
+          <div className="col">
+            <div className="p-3 border bg-light">
+              <RenderHtml
+                contentWidth={width}
+                source={{ html: htmlContent }}
+                onPress={(e) => handleSectionPress(e)}
+              />
+            </div>
+          </div>
+        </div>
       )}
-
       {mode === 'singleContainer' && (
-        <View style={styles.singleContainer}>
+        <div className="container mt-3">
           {isEditMode ? (
             <TextInput
-              style={[styles.textInput, styles.editor]}
+              className="form-control"
               multiline
               placeholder="Enter Markdown here..."
               value={markdownText}
               onChangeText={setMarkdownText}
             />
           ) : (
-            <View style={styles.previewContainerSingle}>
+            <div className="p-3 border bg-light">
               <RenderHtml
                 contentWidth={width}
                 source={{ html: htmlContent }}
               />
-            </View>
+            </div>
           )}
-          <TouchableOpacity style={styles.renderButton} onPress={() => setIsEditMode(!isEditMode)}>
-            <Text>{isEditMode ? 'Render' : 'Edit'}</Text>
-          </TouchableOpacity>
-        </View>
+          <button type="button" className="btn btn-secondary mt-2" onClick={() => setIsEditMode(!isEditMode)}>
+            {isEditMode ? 'Render' : 'Edit'}
+          </button>
+        </div>
       )}
-
       {mode === 'focusMode' && (
-        <View style={styles.focusContainer}>
-          <View style={styles.previewFocusContainer}>
+        <div className="container mt-3">
+          <div className="p-3 border bg-light">
             <RenderHtml
               contentWidth={width}
               source={{ html: htmlContent }}
               onPress={(e) => handleSectionPress(e)}
             />
-          </View>
+          </div>
           {focusText !== '' && (
             <TextInput
-              style={[styles.focusTextInput, { top: focusPosition.y, left: focusPosition.x }]}
+              className="form-control position-absolute"
+              style={{ top: `${focusPosition.y}px`, left: `${focusPosition.x}px` }}
               multiline
               value={focusText}
               onChangeText={setFocusText}
               onBlur={handleSave}
             />
           )}
-        </View>
+        </div>
       )}
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-  },
-  button: {
-    padding: 10,
-    backgroundColor: '#ddd',
-    borderRadius: 5,
-  },
-  textInput: {
-    height: 200,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    padding: 16,
-    marginBottom: 20,
-    textAlignVertical: 'top',
-  },
-  previewContainer: {
-    flex: 1,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    padding: 16,
-  },
-  previewContainerSingle: {
-    flex: 1,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    padding: 16,
-  },
-  previewFocusContainer: {
-    flex: 1,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    padding: 16,
-  },
-  editor: {
-    fontFamily: 'monospace',
-    fontSize: 16,
-  },
-  singleContainer: {
-    flex: 1,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    padding: 16,
-  },
-  focusContainer: {
-    flex: 1,
-  },
-  focusTextInput: {
-    position: 'absolute',
-    width: '80%',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    padding: 8,
-    fontFamily: 'monospace',
-    fontSize: 16,
-  },
-  defaultContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  renderButton: {
-    padding: 10,
-    backgroundColor: '#ddd',
-    borderRadius: 5,
-    alignSelf: 'center',
-    marginTop: 10,
-    width: '50%',
-  },
-});
-
-const htmlStyles = {
-  body: {
-    fontFamily: 'serif',
-    fontSize: 16,
-  },
-};
