@@ -32,11 +32,10 @@ export default function Index() {
         <TouchableOpacity style={styles.button} onPress={() => setMode('default')}><Text>Default View</Text></TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => setMode('singleContainer')}><Text>Single Container View</Text></TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => setMode('focusMode')}><Text>Focus Mode</Text></TouchableOpacity>
-        {mode === 'singleContainer' && <TouchableOpacity style={styles.button} onPress={() => setIsEditMode(!isEditMode)}><Text>{isEditMode ? 'Rendered Mode' : 'Edit Mode'}</Text></TouchableOpacity>}
       </View>
 
       {mode === 'default' && (
-        <View>
+        <View style={styles.defaultContainer}>
           <TextInput
             style={[styles.textInput, styles.editor]}
             multiline
@@ -73,6 +72,9 @@ export default function Index() {
               />
             </View>
           )}
+          <TouchableOpacity style={styles.renderButton} onPress={() => setIsEditMode(!isEditMode)}>
+            <Text>{isEditMode ? 'Render' : 'Edit'}</Text>
+          </TouchableOpacity>
         </View>
       )}
 
@@ -164,6 +166,19 @@ const styles = StyleSheet.create({
     padding: 8,
     fontFamily: 'monospace',
     fontSize: 16,
+  },
+  defaultContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  renderButton: {
+    padding: 10,
+    backgroundColor: '#ddd',
+    borderRadius: 5,
+    alignSelf: 'center',
+    marginTop: 10,
+    width: '50%',
   },
 });
 
